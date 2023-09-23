@@ -1,4 +1,4 @@
-module github.com/zianwar/daemon
+module github.com/zianwar/cloudshare
 
 go 1.21.1
 
