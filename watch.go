@@ -44,7 +44,7 @@ func uploadAndNotify(filepath string) error {
 	log.Printf("Uploaded file '%s' to '%s'\n", filepath, url)
 
 	clipboard.Write(clipboard.FmtText, []byte(url))
-	if err := beeep.Notify("Link copied to clipboard", url, "assets/icon.png"); err != nil {
+	if err := beeep.Notify("Link copied to clipboard", url, ""); err != nil {
 		return fmt.Errorf("failed to send notification %v", err)
 	}
 

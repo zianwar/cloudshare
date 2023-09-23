@@ -18,20 +18,6 @@ import (
 	"github.com/lithammer/shortuuid/v4"
 )
 
-var (
-	r2BucketName      string
-	r2AccountId       string
-	r2AccessKeyId     string
-	r2AccessKeySecret string
-)
-
-func init() {
-	r2BucketName = os.Getenv("R2_BUCKET_NAME")
-	r2AccountId = os.Getenv("R2_ACCOUNT_ID")
-	r2AccessKeyId = os.Getenv("R2_ACCESS_KEY_ID")
-	r2AccessKeySecret = os.Getenv("R2_ACCESS_KEY_SECRET")
-}
-
 func uploadFile(ctx context.Context, filepath string) (string, error) {
 	r2Resolver := aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
 		return aws.Endpoint{
@@ -60,7 +46,7 @@ func uploadFile(ctx context.Context, filepath string) (string, error) {
 		return "", fmt.Errorf("failed to upload file to R2: %v", err)
 	}
 
-	return fmt.Sprintf("https://pub.4nz.io/%s", objectKey), nil
+	return fmt.Sprintf("%s/%s", r2BucketDomain, objectKey), nil
 }
 
 // UploadLargeObject uses an upload manager to upload data to an object in a bucket.

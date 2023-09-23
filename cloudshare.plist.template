@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>cloudshare</string>
+    <key>ProgramArguments</key>
+     <array>
+        <string>{{ Path to cloudshare binary }}</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>CLOUDSHARE_WATCH_PATH</key>
+        <string>{{ directory to watch }}</string>
+        <key>R2_BUCKET_DOMAIN</key>
+        <string>{{ Base domain for R2 bucket to use }}</string>
+        <key>R2_BUCKET_NAME</key>
+        <string>{{ Bucket name }}</string>
+        <key>R2_ACCOUNT_ID</key>
+        <string>{{ TODO }}</string>
+        <key>R2_ACCESS_KEY_ID</key>
+        <string>{{ TODO }}</string>
+        <key>R2_ACCESS_KEY_SECRET</key>
+        <string>{{ TODO }}</string>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/Users/[USERNAME]/.local/logs/cloudshare.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/[USERNAME]/.local/logs/cloudshare.log</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+</dict>
+</plist>

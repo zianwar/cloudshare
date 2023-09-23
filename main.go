@@ -1,62 +1,54 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path"
+	"strings"
 	"sync"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/sevlyar/go-daemon"
 	"golang.design/x/clipboard"
 )
 
 const (
-	SERVICE_NAME  = "cloudshare"
-	MEDIA_DIRNAME = "Shots"
+	SERVICE_NAME = "cloudshare"
 )
 
-// To terminate the daemon use:
-//
-//	kill `cat [SERVICE_NAME].pid`
-func main() {
+var (
+	watchPath         string
+	r2BucketDomain    string
+	r2BucketName      string
+	r2AccountId       string
+	r2AccessKeyId     string
+	r2AccessKeySecret string
+)
 
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
+func init() {
+	watchPath = strings.TrimSpace(os.Getenv("CLOUDSHARE_WATCH_PATH"))
+	r2BucketDomain = strings.TrimSpace(os.Getenv("R2_BUCKET_DOMAIN"))
+	r2BucketName = strings.TrimSpace(os.Getenv("R2_BUCKET_NAME"))
+	r2AccountId = strings.TrimSpace(os.Getenv("R2_ACCOUNT_ID"))
+	r2AccessKeyId = strings.TrimSpace(os.Getenv("R2_ACCESS_KEY_ID"))
+	r2AccessKeySecret = strings.TrimSpace(os.Getenv("R2_ACCESS_KEY_SECRET"))
+
+	if r2BucketDomain == "" || r2BucketName == "" || r2AccountId == "" ||
+		r2AccessKeyId == "" || r2AccessKeySecret == "" || watchPath == "" {
+		log.Fatalf("Missing required environment variables\n")
+	}
+}
+
+func main() {
+	wg := &sync.WaitGroup{}
+
+	homePath, _ := os.UserHomeDir()
+	workPath := path.Join(homePath, ".config", SERVICE_NAME)
+
+	if err := os.MkdirAll(workPath, os.ModePerm); err != nil {
 		log.Fatalln(err)
 	}
 
-	dctx := &daemon.Context{
-		PidFileName: fmt.Sprintf("%s.pid", SERVICE_NAME),
-		PidFilePerm: 0644,
-		LogFileName: fmt.Sprintf("%s.log", SERVICE_NAME),
-		LogFilePerm: 0640,
-		WorkDir:     "./",
-		Umask:       027,
-		Args:        []string{"[go-daemon sample]"},
-	}
-
-	d, err := dctx.Reborn()
-	if err != nil {
-		log.Fatal("Unable to run: ", err)
-	}
-	if d != nil {
-		return
-	}
-	defer dctx.Release()
-
-	// Init returns an error if the package is not ready for use.
-	if err := clipboard.Init(); err != nil {
-		log.Fatalf("Failed to initialize clipboard: %v\n", err)
-	}
-
-	mediaDir := path.Join(homeDir, MEDIA_DIRNAME)
-	wg := &sync.WaitGroup{}
-
-	// Ensure directory exists
-	os.MkdirAll(mediaDir, os.ModePerm)
-	if err != nil {
+	if err := os.MkdirAll(watchPath, os.ModePerm); err != nil {
 		log.Fatalln(err)
 	}
 
@@ -67,16 +59,20 @@ func main() {
 	}
 	defer watcher.Close()
 
+	if err := watcher.Add(watchPath); err != nil {
+		log.Fatal(err)
+	}
+
+	// Init returns an error if the package is not ready for use.
+	if err := clipboard.Init(); err != nil {
+		log.Fatalf("Failed to initialize clipboard: %v\n", err)
+	}
+
 	// Start watch loop
 	wg.Add(1)
 	go watchLoop(watcher, wg)
 
-	err = watcher.Add(mediaDir)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Printf("Daemon started - watching %s\n", mediaDir)
+	log.Printf("Started watching directory '%s'\n", watchPath)
 
 	wg.Wait()
 }

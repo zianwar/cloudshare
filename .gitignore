@@ -1,3 +1,4 @@
 cloudshare
 *.pid
 *.log
+com.zianwar.cloudshare.plist
