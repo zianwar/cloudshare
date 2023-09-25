@@ -25,7 +25,7 @@ type StorageClient struct {
 	client *s3.Client
 }
 
-func NewStorageClient() (*StorageClient, error) {
+func NewStorageClient() *StorageClient {
 	r2Resolver := aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
 		return aws.Endpoint{
 			URL: fmt.Sprintf("https://%s.r2.cloudflarestorage.com", r2AccountId),
@@ -37,10 +37,10 @@ func NewStorageClient() (*StorageClient, error) {
 		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(r2AccessKeyId, r2AccessKeySecret, "")),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to configure s3 client: %v", err)
+		log.Fatalf("failed to configure s3 client: %v", err)
 	}
 
-	return &StorageClient{client: s3.NewFromConfig(cfg)}, nil
+	return &StorageClient{client: s3.NewFromConfig(cfg)}
 }
 
 func (sc *StorageClient) UploadFile(filepath string) (string, error) {

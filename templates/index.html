@@ -7,7 +7,6 @@
 </head>
 
 <body>
-
     <div class="container mx-auto flex-col items-center">
         <div class="px-5 py-5 font-mono text-sm font-bold text-gray-500">cloudshare</div>
         <div class="px-5 divide-y-2 divide-gray-100">
@@ -15,7 +14,7 @@
             <div class="py-6 flex space-x-4">
                 <div class="flex-shrink-0 flex flex-col">
                     {{if $link.IsVideo }}
-                    <video class="w-16 h-16  rounded-md border" src="{{ $link.Url }}" controls>
+                    <video class="w-16 h-16 rounded-md border" src="{{ $link.Url }}" controls>
                         Your browser does not support the video tag.
                     </video>
                     {{else if $link.IsImage }}

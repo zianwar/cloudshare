@@ -13,7 +13,7 @@ import (
 )
 
 //go:embed templates/*.html
-var content embed.FS
+var templatesContent embed.FS
 
 type Server struct {
 	Port          string
@@ -67,7 +67,7 @@ func (s Server) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func renderTemplate(w http.ResponseWriter, name string, data interface{}) {
-	t, err := template.ParseFS(content, "templates/*.html")
+	t, err := template.ParseFS(templatesContent, "templates/*.html")
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error %s", err.Error()), 500)
 		return

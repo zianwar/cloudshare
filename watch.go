@@ -17,7 +17,6 @@ func NewWatcher(watchPath string) *fsnotify.Watcher {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer watcher.Close()
 
 	if err := watcher.Add(watchPath); err != nil {
 		log.Fatal(err)

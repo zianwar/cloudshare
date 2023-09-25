@@ -10,10 +10,6 @@ import (
 	"golang.design/x/clipboard"
 )
 
-const (
-	SERVICE_NAME = "cloudshare"
-)
-
 var (
 	watchPath         string
 	r2BucketDomain    string
@@ -42,13 +38,10 @@ func init() {
 }
 
 func main() {
-	storageClient, err := NewStorageClient()
-	if err != nil {
-		log.Fatal(err)
-	}
+	storageClient := NewStorageClient()
 
-	// Setup directory watcher
 	watcher := NewWatcher(watchPath)
+	defer watcher.Close()
 
 	// On file create handler
 	onCreate := func(filepath string) error {
@@ -72,7 +65,7 @@ func main() {
 
 	log.Printf("Started watching directory '%s'\n", watchPath)
 
-	// Start web server for listing and managing uploaded files
+	// Start web server for managing uploads
 	server := Server{
 		Port:          "80",
 		StorageClient: storageClient,
