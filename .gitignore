@@ -1,4 +1,4 @@
 cloudshare
-*.pid
-*.log
 com.zianwar.cloudshare.plist
+server
+.DS_Store
