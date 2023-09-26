@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"os"
+	"path"
+	"strings"
 
 	"github.com/fsnotify/fsnotify"
 )
@@ -32,7 +34,12 @@ func watchLoop(w *fsnotify.Watcher, onCreate func(string) error) {
 			if !ok {
 				return
 			}
+
 			if event.Op == fsnotify.Create {
+				if strings.HasPrefix(path.Base(event.Name), ".") {
+					log.Println("Ignoring hidden file:", event.Name)
+					continue
+				}
 				if err := onCreate(event.Name); err != nil {
 					log.Fatalln(err)
 				}
