@@ -62,8 +62,6 @@ func (s Server) Delete(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("Error %s", err.Error()), 500)
 		return
 	}
-
-	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func renderTemplate(w http.ResponseWriter, name string, data interface{}) {

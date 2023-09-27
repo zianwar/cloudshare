@@ -4,6 +4,9 @@
 <head>
     <title>Cloudshare</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6"
+        integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous">
+        </script>
 </head>
 
 <body>
@@ -11,7 +14,7 @@
         <div class="px-5 py-5 font-mono text-sm font-bold text-gray-500">cloudshare</div>
         <div class="px-5 divide-y-2 divide-gray-100">
             {{ range $link := .Links }}
-            <div class="py-6 flex space-x-4">
+            <div class="py-6 flex space-x-4" id="link-element">
                 <div class="flex-shrink-0 flex flex-col">
                     {{if $link.IsVideo }}
                     <video class="w-16 h-16 rounded-md border" src="{{ $link.Url }}" controls>
@@ -26,7 +29,7 @@
                 <div class="flex flex-col justify-between">
                     <a id="link" target="_blank" class="mb-2 text-blue-600" href="{{ $link.Url }}">{{ $link.Url }}</a>
                     <div class="space-x-2">
-                        <form class="inline-block" action="/delete" method="post">
+                        <form hx-post="/delete" hx-swap="delete" hx-target="#link-element" class="inline-block">
                             <input type="text" class="hidden" name="url" type="hidden" value="{{ $link.Url }}">
                             <button type="submit"
                                 class="inline-block rounded border border-red-600 px-4 py-1 text-sm font-medium text-red-600 hover:bg-red-600 hover:text-white focus:outline-none active:bg-red-500">
