@@ -17,7 +17,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/lithammer/shortuuid/v4"
+	"github.com/teris-io/shortid"
 )
 
 // StorageClient handles Cloudflare R2 storage operations
@@ -44,7 +44,7 @@ func NewStorageClient() *StorageClient {
 }
 
 func (sc *StorageClient) UploadFile(filepath string) (string, error) {
-	objectKey := fmt.Sprintf("%s/%s%s", "shots", shortuuid.New(), path.Ext(filepath))
+	objectKey := fmt.Sprintf("%s/%s%s", "shots", shortid.MustGenerate(), path.Ext(filepath))
 	bytes, err := os.ReadFile(filepath)
 	if err != nil {
 		return "", fmt.Errorf("failed to read file for upload: %v", err)

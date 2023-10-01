@@ -11,7 +11,7 @@ require (
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gen2brain/beeep v0.0.0-20230907135156-1a38885a97fc
 	github.com/gorilla/mux v1.8.0
-	github.com/lithammer/shortuuid/v4 v4.0.0
+	github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569
 	golang.design/x/clipboard v0.7.0
 )
 
@@ -32,7 +32,6 @@ require (
 	github.com/aws/smithy-go v1.14.2 // indirect
 	github.com/go-toast/toast v0.0.0-20190211030409-01e6764cf0a4 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
 	github.com/tadvi/systray v0.0.0-20190226123456-11a2b8fa57af // indirect
